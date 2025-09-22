@@ -1,6 +1,6 @@
 
 /*
- * *** PLACE YOUR NAME / SECTION HERE ***
+ * *** Jesus Ortega / 002 ***
  *
  * Homework # 2 (Programming Assignment). This Java class defines a few basic
  * manipulation operations of a binary trees.
@@ -87,12 +87,12 @@ public class BinaryTree {
 
     public Node root;
 
-    public void deleteTree() {
+    public void deleteTree() { 
         root = null;
     }
 
     public void replaceValue(int oldVal, int newVal) {
-        replaceValueHelper(root, oldVal, newVal);
+        replaceValueHelper(root, oldVal, newVal); 
     }
 
     public int findMin() {
@@ -100,7 +100,7 @@ public class BinaryTree {
     }
 
     public int nodesGT(int val) {
-        return nodesGTHelper(root, val);
+        return nodesGTHelper(root, val); 
     }
 
 
@@ -208,7 +208,7 @@ public class BinaryTree {
      ***********************************************************/
 
 
-    /*
+    /**
      * private method replaceValueHelper
      *
      * This method will traverse the tree using a depth first search
@@ -217,18 +217,26 @@ public class BinaryTree {
      *
      * Depth first search of the tree is based on recursion. This will result
      * in very few lines of code.
+     * 
+     * @param node, oldVal, newVal
+     * @precondition node exists, oldVal and newVal are integers
+     * @postcondition all instances of oldVal in the entire tree are replaced with newVal
      *
      */
 
     private void replaceValueHelper(Node node, int oldVal, int newVal) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
-
+        if (node == null) {
+            return; // if node is null or has no decendent, return.
+        } else if (node.data == oldVal){
+            node.data = newVal; //if node data is equal to oldVal, replace with newVal.
+        } 
+        replaceValueHelper(node.left, oldVal, newVal); //traverse left child node
+        replaceValueHelper(node.right, oldVal, newVal); //traverse right child node
     }
 
 
-    /*
+    /**
      * private method findMinHelper()
      *
      * This method will traverse the tree using depth first search traversal and
@@ -240,18 +248,25 @@ public class BinaryTree {
      *
      * Depth first search of the tree is based on recursion. This will result
      * in very few lines of code.
+     * @param node
+     * @precondition node exists
+     * @postcondition recurses through every node to find the minimum value.
+     * @return minimum data value in the binary tree, or Integer.MAX_VALUE if tree is null
      */
 
     private int findMinHelper(Node node) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
-
-        return Integer.MAX_VALUE;
+        if (node == null) {
+            return Integer.MAX_VALUE; //if node is null, return max value.
+        } 
+        //post-order traversal.
+        int leftMin = findMinHelper(node.left); //recurses to the left nodes. 
+        int rightMin = findMinHelper(node.right); //recurses to the right nodes.
+        return Math.min(node.data, Math.min(leftMin, rightMin)); //return the smallest value found between left and right nodes, then current node.
     }
 
 
-    /*
+    /**
      * private method nodeGTHelper()
      *
      * This method will traverse the tree using depth first search traversal and
@@ -262,21 +277,28 @@ public class BinaryTree {
      *
      * Depth first search of the tree is based on recursion. This will result
      * in very few lines of code.
+     * 
+     * @param node, val
+     * @precondition node exists, val is an integer
+     * @postcondition counts every node that is greater than "val"
+     * @return count of nodes with data value greater than 'val'
      */
 
     private int nodesGTHelper(Node node, int val) {
-
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
-
-        // RETURNING -1 IN THIS STUB, WHICH WILL FAIL ALL TESTS. REPLACE IT WITH YOUR CODE
-
-
-        return -1;
+        int count = 0; // count variable.
+        if (node == null) {
+            return 0; //if node is null, return 0.
+        } else if (node.data > val) {
+            count += 1; //if node data is greater than val, increment count by one.
+        }  
+        count += nodesGTHelper(node.left, val); //traverse left child node
+        count += nodesGTHelper(node.right, val); //traverse right child node
+        
+        return count;
     }
 
 
-    /*
+    /**
      * public method average()
      *
      * This method will traverse the tree using depth first search traversal and
@@ -295,6 +317,10 @@ public class BinaryTree {
      *
      * Depth first search of the tree is based on recursion. This will result
      * in very few lines of code within the helper method.
+     * @param node
+     * @precondition node exists
+     * @postcondition recurses through every node to calculate the sum and count of nodes as an array.
+     * @return sum value and counter of all nodes in the binary tree, or 0 if tree is null
      */
 
     public double average() {
@@ -303,14 +329,15 @@ public class BinaryTree {
     }
 
     private int[] averageHelper(Node n) {
+        if (n == null) {
+            return new int[]{0, 0}; //if node is null, return 0 for sum and count.
+        }
+        int[] left = averageHelper(n.left); //recurses to the left nodes.
+        int[] right = averageHelper(n.right); //recurses to the right nodes after left nodes.
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        int total = n.data + left[0] + right[0]; //sum of all nodes.
+        int counter = 1 + left[1] + right[1]; //count of all nodes.
 
-        // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
-        // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
-        // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
-
-        return new int[]{0, 0};
+        return new int[]{total, counter}; //returns sum and count as an array for the next recursion.
     }
 }
